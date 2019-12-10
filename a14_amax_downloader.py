@@ -24,17 +24,20 @@ def retrieve_with_timeout(remote_path, file_name, timeout = 60):
         except:
             raise
 
-working_dir = "C:\\Users\\q0hecgsk\\Desktop\\test\\ams"
+working_dir = "D:\\DSOD\\Data\\AMAX_Files"
 os.chdir(working_dir)
 
-ftp_path = "ftp://hdsc.nws.noaa.gov/pub/hdsc/data/_TimeSeries_stations/"
-station_file = pd.read_csv("C:\\Users\\q0hecgsk\\Desktop\\test\\PrecGageStations_Whittier_100miles_updated.txt")
+ftp_path = "https://hdsc.nws.noaa.gov/pub/hdsc/data/_TimeSeries_stations/"
+station_file = pd.read_csv("D:\\DSOD\\Data\\ca_by_div.csv")
 
 onlyfiles = [f for f in listdir(working_dir) if isfile(join(working_dir, f))]
-#stations_downloaded = [remove_ext(s) for s in onlyfiles]
+stations_downloaded = [remove_ext(s) for s in onlyfiles]
 
-for station in station_file["Station_ID"]:
-    file_name = "CA_" + station + "_ams.txt"
+#for station in station_file["Station_ID"]:
+for idx, row in station_file.iterrows():
+    station = row["Station_ID"]
+    state_code = row["State"]
+    file_name = state_code + "_" + station + "_ams.txt"
     if file_name in onlyfiles:
         continue
     remote_path = ftp_path + file_name
@@ -45,5 +48,6 @@ for station in station_file["Station_ID"]:
         print("File not found, skipping...")
         continue
     finally:
-        print(station)
+        pass
+        #print(station)
 
